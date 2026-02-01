@@ -162,10 +162,20 @@ class TestModeEnforcer(unittest.TestCase):
         self.assertFalse(enforcer.can_do(Action.CREATE_THREAD, has_approval=False))
         self.assertTrue(enforcer.can_do(Action.CREATE_THREAD, has_approval=True))
     
+    def test_yolo_mode(self):
+        """Yolo mode allows everything without approval."""
+        enforcer = ModeEnforcer("yolo")
+        
+        # Everything allowed
+        self.assertTrue(enforcer.can_do(Action.READ_THREADS))
+        self.assertTrue(enforcer.can_do(Action.BUMP))
+        self.assertTrue(enforcer.can_do(Action.REPLY))
+        self.assertTrue(enforcer.can_do(Action.CREATE_THREAD))  # No approval needed!
+    
     def test_invalid_mode(self):
         """Invalid mode raises error."""
         with self.assertRaises(ValueError):
-            ModeEnforcer("yolo")
+            ModeEnforcer("invalid_mode")
 
 
 if __name__ == "__main__":

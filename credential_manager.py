@@ -72,8 +72,8 @@ class CredentialManager:
         Args:
             mode: New mode (lurk|engage|active)
         """
-        if mode not in ("lurk", "engage", "active"):
-            raise ValueError(f"Invalid mode: {mode}. Must be lurk|engage|active")
+        if mode not in ("lurk", "engage", "active", "yolo"):
+            raise ValueError(f"Invalid mode: {mode}. Must be lurk|engage|active|yolo")
         
         creds = self.load()
         if creds is None:

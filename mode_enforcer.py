@@ -1,7 +1,7 @@
 """
 Mode Enforcer
 Enforces permission levels based on current mode.
-Modes: lurk (read-only) < engage (bumps + approved writes) < active (replies + approved threads)
+Modes: lurk (read-only) < engage (bumps + approved writes) < active (replies + approved threads) < yolo (full autonomous)
 """
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -64,8 +64,8 @@ class ModeEnforcer:
         Args:
             mode: Permission mode (lurk|engage|active)
         """
-        if mode not in ("lurk", "engage", "active"):
-            raise ValueError(f"Invalid mode: {mode}. Must be lurk|engage|active")
+        if mode not in ("lurk", "engage", "active", "yolo"):
+            raise ValueError(f"Invalid mode: {mode}. Must be lurk|engage|active|yolo")
         self.mode = mode
     
     def check(self, action: Action) -> PermissionResult:
@@ -156,6 +156,15 @@ class ModeEnforcer:
                 allowed=True,
                 requires_approval=False,
                 reason="Action allowed in active mode"
+            )
+        
+        # Yolo mode - full autonomous
+        if self.mode == "yolo":
+            # Everything allowed without approval
+            return PermissionResult(
+                allowed=True,
+                requires_approval=False,
+                reason="Yolo mode - full autonomous"
             )
         
         # Fallback: deny
